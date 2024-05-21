@@ -29,7 +29,7 @@ def cargarDiccionarios(diccionario):
     except FileNotFoundError:
         print ("Error: El fichero de la base de datos fue ilocalizable.")
         print ("Creando una nueva base de datos.")
-        with open (DIRECTORIO_BASE, 'a') as baseDeDatos:
+        with open (DIRECTORIO_BASE_CSV, mode='w', newline='') as baseDeDatos:
             escritor = csv.writer(baseDeDatos, delimiter=';')
             escritor.writerow(['Palabra', 'Silabas', 'SilabaTonica'])
     except PermissionError:
