@@ -1,2 +1,6 @@
 Palabra;Silabas;SilabaTonica
-hola;;['ho', 'lA']
+hola;['ho', 'la'];['ho', 'lA']
+Hola;['Ho', 'la'];['Ho', 'lA']
+paraguayo;['pa', 'ra', 'gua', 'yo'];['pa', 'ra', 'gua', 'YO']
+paraguay;;['pa', 'ra', 'guAy']
+rey;;rEY

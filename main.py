@@ -16,7 +16,6 @@ def cerrar(diccionario):
     exit()
 
 def interpreteComandos(Comando,PalabrasAnalizadas):
-    print (Comando)
     if Comando == "3":
         cerrar(PalabrasAnalizadas)
     else: 
@@ -51,7 +50,7 @@ def interpreteComandos(Comando,PalabrasAnalizadas):
             elif PalabrasAnalizadas[palabra].get('silabaTonica') == '':
                 tonica = procesador.entonar(palabra)
                 PalabrasAnalizadas[palabra]={'silabas':PalabrasAnalizadas[palabra].get('silabas'),'silabaTonica': tonica}
-                print(f"\n[+] Se añadió la silaba tónica de {palabra} a la base de datos.")
+                print(f"\n Se añadió la silaba tónica de {palabra} a la base de datos.")
                 print (f"{palabra}:{tonica}\n")
             elif PalabrasAnalizadas[palabra].get('silabaTonica') != '':
                 print(f"\n Se encontró la silaba tónica de {palabra} en la base de datos.")
@@ -70,7 +69,6 @@ def main():
             print(" 2) Buscar vocal tónica.\n")
             print(" 3) Salir\n")
             funcion = input("Opción> ")
-            print (funcion)
             interpreteComandos(funcion, palabrasAnalizadas)
     except KeyboardInterrupt:
         cerrar(palabrasAnalizadas)
