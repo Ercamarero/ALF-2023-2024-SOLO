@@ -27,10 +27,11 @@ pR5a = r"(?P<P5a>(([aeoáéó]h?[iuü])|([iuü]h?[aeoáéó])|(ih?[uúü]|íh?[u
 pR5bc = r"(?P<P5bc>[aeou]h?[íú]|[íú]h?[aeou]|[aá]h?[aá]|[eé]h?[eé]|[ií]h?[ií]|[oó]h?[oó]|[uú]h?[uú]|[aeoáéó][aeoáéó])"
 # R6 Triptongo -> Después de v3
 pR6 = r"(?i)(?P<P6>[iu][aeoáéó][iuy])"
-# Regla de tildes.
+# Regla para reconocer palabas que contengan tildes.
 tilde = re.compile(r"(?i)(?P<Tilde>([a-z]+)?[áéíóú]([a-z]+)?)")
-# Regla agudas
+# Regla para reconocer palabras agudas
 agudas = re.compile(r"(?P<Ag>([a-z]*[aeiou][ns]|[a-z]*[aeiouy]\b))")
+#Expresiones para la recoleccion de vocales con tilde ya sean mayusculas o minusculas.
 aRe = r"(?i)(?P<A>[á])"
 eRe = r"(?P<E>[é])"
 iRe = r"(?P<I>[í])"
@@ -41,7 +42,14 @@ R = re.compile(pR6 + "|" + pR5a + "|" + pR5bc + "|" + pR1 + "|" + pR2 + "|" + pR
 E = re.compile(pR6 + "|" + pR5a)
 C = re.compile(aRe + "|" + eRe + "|" + iRe + "|" + oRe + "|" + uRe)
 
+"""
+tonica(silabas)-> Array:
+    Se trata de la funcion para la modificación de aquellas palabras que no cuenten con tildes para mostrar cual sería su silaba tonica.
+Parametros
+----------
+Recibe un segmento del array que compone la palabra original el cual recorre caracter a caracter en busqueda de la letra que se debe modificar.
 
+"""
 def tonica(silabas):
     t = E.search(silabas)
     mod = ''
@@ -80,7 +88,15 @@ def tonica(silabas):
                 mod += i
         return mod
     
+"""
+entonartonicas(silabeo)-> Array
+    La funcion que gestiona la modificacion de aquellas cadenas que si contengan el simbolo '´' sobre alguna vocal.
+Parametros
+----------
+    Recibe el array completo de la palabra el cual recorre silaba a silaba, de manera que con la expresion regular de las tildes localiza donde se haya una 
+    por ultimo recorre ese segmento simbolo a simbolo para modificar la letra correspondiente.
 
+"""
 def entonartonicas(silabeo):
     mod = ''
     for i in silabeo:
@@ -106,6 +122,11 @@ def entonartonicas(silabeo):
             continue
     return mod
 
+"""
+def entonar(cadena)-> Array :
+    funcion que dada una cadena de texto, procede a su correspondiente silabeo y la evaluacion de la existencia de tildes y longitud de la palabra.
+    Encargada de decidir a cual de las funciones auxiliares mandarla para la posterior modificacion de la cadena.
+"""
 def entonar(cadena):
     aux = silabear(cadena)
     m = tilde.match(cadena)
@@ -132,6 +153,13 @@ def entonar(cadena):
             aux[-2] = tonica(aux[-2])
             return aux
 
+"""
+def silabear(cadena): -> Array
+    funcion encargada de la separación silabica en base a las diversas reglas aportadas por el boletin de practicas.
+
+Parametros:
+    Un string con la palabra que deseamos procesar. 
+"""
 def silabear(cadena):
     cortes = []
     corteactual = 0

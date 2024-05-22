@@ -28,15 +28,18 @@ def interpreteComandos(Comando,PalabrasAnalizadas):
                 PalabrasAnalizadas[palabra] = {'silabas': silabeo, 'silabaTonica': ''}
                 print (f"\nSe añadio la palabra: {palabra} a la base de datos.\n ")
                 print (f"{palabra}: {silabeo}\n")
+                return 
             elif PalabrasAnalizadas[palabra].get('silabas') == '' :
                 silabeo = procesador.silabear(palabra)
                 PalabrasAnalizadas[palabra] = {'silabas': silabeo, 'silabaTonica': PalabrasAnalizadas[palabra].get('silabaTonica')}
                 print (f"\nSe añadio la separacion silabica de {palabra}\n")
                 print (f"{palabra}: {silabeo}\n")
+                return 
             elif PalabrasAnalizadas[palabra].get('silabas') != '':
                 print(f"\nSe encontro la separacion silabica de {palabra}\n")
                 silabeo = PalabrasAnalizadas[palabra].get("silabas")
                 print (f"{palabra}:{silabeo}")
+                return 
         elif Comando == "2":
             palabra = input("palabra> ")
             if palabra not in PalabrasAnalizadas:
@@ -45,17 +48,23 @@ def interpreteComandos(Comando,PalabrasAnalizadas):
 
                 PalabrasAnalizadas[palabra] = {'silabas':'', 'silabaTonica': tonica}
 
-                print(f"\n[+] Se añadió la silaba tónica de {palabra} a la base de datos.")
+                print(f"\n Se añadió la silaba tónica de {palabra} a la base de datos.")
                 print (f"{palabra}:{tonica}\n")
+                return 
             elif PalabrasAnalizadas[palabra].get('silabaTonica') == '':
                 tonica = procesador.entonar(palabra)
                 PalabrasAnalizadas[palabra]={'silabas':PalabrasAnalizadas[palabra].get('silabas'),'silabaTonica': tonica}
                 print(f"\n Se añadió la silaba tónica de {palabra} a la base de datos.")
                 print (f"{palabra}:{tonica}\n")
+                return 
             elif PalabrasAnalizadas[palabra].get('silabaTonica') != '':
                 print(f"\n Se encontró la silaba tónica de {palabra} en la base de datos.")
                 tonica = PalabrasAnalizadas[palabra].get("silabaTonica")
                 print(f"{palabra}:{tonica}")
+                return 
+            else:
+                print("Comando no Reconocido por favor utilice uno de los mostrados anteriormente.")
+                return 
 
 
 def main():
