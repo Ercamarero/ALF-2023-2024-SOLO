@@ -14,7 +14,7 @@ pR2 = r"(?P<P2>[aeiouáéíóúü](([pcbgf][rl])|([dt]r))[aeiouáéíóúü])"
 pR2c = r"(?P<P2c>[aeiouáéíóúü][bcdghfjklmnñpqrstvwxyz][bcdhfgjklmnñpqrstvwxyz][aeiouáéíóúü])"
 # R3 si siguen la regla 2a y 2b entonces la segunda sílaba es c2 R3 ->
 # v1 c1 c2 c3 v2 -> c2 c3 v2
-pR3 = r"(?P<P3>[aeiouáéíóúü][bcdfghjklmnñpqrstvwxyz](([pcbgf][rl])|([dt]r))[aeiouáéíóúü])"
+pR3 = r"(?P<P3>[aeiouáéíóúü][bcdfghjklmnñpqrstvwxyz](([pcbgf][rlh])|([dt]r))[aeiouáéíóúü])"
 # R3bc si sigue la regla 3bc entonces la segunda sílaba empiezza por c3 ->
 # c3 v2
 pR3bc = r"(?P<P3bc>[aeiouáéíóúü](([bdnmlr]s)|(st))[bcdfghjklmnñpqrstvwxyz][aeiouáéíóúü])"
@@ -31,14 +31,15 @@ pR6 = r"(?i)(?P<P6>[iu][aeoáéó][iuy])"
 tilde = re.compile(r"(?i)(?P<Tilde>([a-z]+)?[áéíóú]([a-z]+)?)")
 # Regla para reconocer palabras agudas
 agudas = re.compile(r"(?P<Ag>([a-z]*[aeiou][ns]|[a-z]*[aeiouy]\b))")
-#Expresiones para la recoleccion de vocales con tilde ya sean mayusculas o minusculas.
+# Expresiones para la recoleccion de vocales con tilde ya sean mayusculas o minusculas.
 aRe = r"(?i)(?P<A>[á])"
 eRe = r"(?P<E>[é])"
 iRe = r"(?P<I>[í])"
 oRe = r"(?P<O>[ó])"
 uRe = r"(?P<U>[úü])"
 # EXPRESIÓN REGULAR GRANDE COMPILADA R
-R = re.compile(pR6 + "|" + pR5a + "|" + pR5bc + "|" + pR1 + "|" + pR2 + "|" + pR2c + "|" + pR3 + "|" + pR3bc + "|" + pR4)
+R = re.compile(
+    pR6 + "|" + pR5a + "|" + pR5bc + "|" + pR1 + "|" + pR2 + "|" + pR2c + "|" + pR3 + "|" + pR3bc + "|" + pR4)
 E = re.compile(pR6 + "|" + pR5a)
 C = re.compile(aRe + "|" + eRe + "|" + iRe + "|" + oRe + "|" + uRe)
 
@@ -50,19 +51,21 @@ Parametros
 Recibe un segmento del array que compone la palabra original el cual recorre caracter a caracter en busqueda de la letra que se debe modificar.
 
 """
+
+
 def tonica(silabas):
     t = E.search(silabas)
     mod = ''
     pos = 0
     if t:
-        #comenzamos por los diptongos
+        # comenzamos por los diptongos
         if t.group("P5a"):
             for i in silabas:
                 if i in abiertas:
                     mod += i.upper()
-                elif i in cerradas and  pos == 1:
+                elif i in cerradas and pos == 1:
                     mod += i.upper()
-                elif i in cerradas and pos ==0:
+                elif i in cerradas and pos == 0:
                     mod += i
                     pos += 1
                 else:
@@ -87,7 +90,8 @@ def tonica(silabas):
             else:
                 mod += i
         return mod
-    
+
+
 """
 entonartonicas(silabeo)-> Array
     La funcion que gestiona la modificacion de aquellas cadenas que si contengan el simbolo '´' sobre alguna vocal.
@@ -97,6 +101,8 @@ Parametros
     por ultimo recorre ese segmento simbolo a simbolo para modificar la letra correspondiente.
 
 """
+
+
 def entonartonicas(silabeo):
     mod = ''
     for i in silabeo:
@@ -122,11 +128,14 @@ def entonartonicas(silabeo):
             continue
     return mod
 
+
 """
 def entonar(cadena)-> Array :
     funcion que dada una cadena de texto, procede a su correspondiente silabeo y la evaluacion de la existencia de tildes y longitud de la palabra.
     Encargada de decidir a cual de las funciones auxiliares mandarla para la posterior modificacion de la cadena.
 """
+
+
 def entonar(cadena):
     aux = silabear(cadena)
     m = tilde.match(cadena)
@@ -137,7 +146,7 @@ def entonar(cadena):
         aux = tonica(aux[0])
         return aux
     if m:
-        for i,silaba in enumerate(aux):
+        for i, silaba in enumerate(aux):
             if tilde.match(silaba):
                 aux[i] = entonartonicas(silaba)
                 continue
@@ -148,10 +157,11 @@ def entonar(cadena):
         r = agudas.match(aux[-1])
         if r:
             aux[-1] = tonica(aux[-1])
-            return  aux
+            return aux
         else:
             aux[-2] = tonica(aux[-2])
             return aux
+
 
 """
 def silabear(cadena): -> Array
@@ -160,22 +170,22 @@ def silabear(cadena): -> Array
 Parametros:
     Un string con la palabra que deseamos procesar. 
 """
+
+
 def silabear(cadena):
     cortes = []
     corteactual = 0
     corteanterior = 0
-    while (len(cadena) != corteactual):
+    while len(cadena) != corteactual:
         m = R.search(cadena, corteactual)
-        # El objeto patrón m daría None salta una excepción en ejecución. Por eso la tratamos primero
-        if m == None:
-            # EN EL CASO DE QUE NO SE ENCUENTRE NADA EN LA CADENA
+        if m is None:
             if corteanterior != corteactual:
                 cortes.append(cadena[corteanterior:len(cadena)])
             else:
                 cortes.append(cadena[corteactual:len(cadena)])
             break
 
-        elif m.group("P1"):
+        if m.group("P1"):
             cortes.append(cadena[corteanterior:m.start() + 1])
             corteactual = m.start() + 1
             corteanterior = corteactual
@@ -187,22 +197,18 @@ def silabear(cadena):
             corteanterior = corteactual
             continue
 
-        # R2c la segunda sílba empieza en la segunda consonante R2c ->
-        # v1 c1 c2 v2 -> c2 v2
         elif m.group("P2c"):
             cortes.append(cadena[corteanterior:m.start() + 2])
             corteactual = m.start() + 2
             corteanterior = corteactual
             continue
-        # R3 si siguen la regla 2a y 2b entonces la segunda sílaba es c2 R3 ->
-        # v1 c1 c2 c3 v2 -> c2 c3 v2
+
         elif m.group("P3"):
             cortes.append(cadena[corteanterior:m.start() + 2])
             corteactual = m.start() + 2
             corteanterior = corteactual
             continue
-        # R3bc si sigue la regla 3bc entonces
-        # la segunda sílaba empieza por c3 -> c3 v2
+
         elif m.group("P3bc"):
             cortes.append(cadena[corteanterior:m.start() + 3])
             corteactual = m.start() + 3
@@ -214,15 +220,8 @@ def silabear(cadena):
             corteactual = m.start() + 3
             corteanterior = corteactual
             continue
-        # R5 Diptongos e hiatos
-        # NO SEPARAMOS SÍLABAS EN 5A
+
         elif m.group("P5a"):
-            # POR HACER PROBAR PALABRA FUNCIÓN -> aplauso es complicado
-            # TENEMOS QUE: Coger desde el principio del anterior
-            # Es decir desde la última regla aplicada coger el corteactual
-            # Supongamos una palabra aplauso -> ahora mismo estamos cogiendo
-            # aplauso -> a so
-            # Idea una variable anterior que almacene el último
             if m.end() + 1 != len(cadena):
                 cortes.append(cadena[corteanterior:m.end()])
                 corteactual = m.end()
@@ -234,17 +233,13 @@ def silabear(cadena):
                 corteanterior = corteactual
                 continue
 
-        # Si es hiato rompemos a partir de la primera vocal v1 v2 -> v2
         elif m.group("P5bc"):
-            if m.end() + 1 != len(cadena):
                 cortes.append(cadena[corteanterior:m.start() + 1])
                 corteactual = m.start() + 1
                 corteanterior = corteactual
                 continue
 
         elif m.group("P6"):
-            # TAMBIÉN TENEMOS EL PROBLEMA AQUÍ EN P6 EL MISMO QUE EN 5A
-
             if cadena[m.end() - 1] == "y" and m.end() < len(cadena):
                 if cadena[m.end()] in vocales:
                     cortes.append(cadena[corteanterior:m.end() - 1])
@@ -275,4 +270,3 @@ def silabear(cadena):
                     continue
 
     return cortes
-

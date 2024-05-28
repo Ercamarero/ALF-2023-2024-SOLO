@@ -21,7 +21,7 @@ def interpreteComandos(Comando,PalabrasAnalizadas):
     else: 
         if Comando == "1":
             palabra = input("palabra> ")
-            print(palabra)
+            palabra = palabra.strip()
             if palabra not in PalabrasAnalizadas:
                 silabeo = procesador.silabear(palabra)
 
@@ -42,6 +42,7 @@ def interpreteComandos(Comando,PalabrasAnalizadas):
                 return 
         elif Comando == "2":
             palabra = input("palabra> ")
+            palabra = palabra.strip()
             if palabra not in PalabrasAnalizadas:
                 # Se introdujo una llamada a silabear para garantizar la independencia entre funciones. 
                 tonica = procesador.entonar(palabra)  
